@@ -34,6 +34,12 @@ func main() {
 	fmt.Printf("Command: %s\n", command)
 
 	// change to directory
+	err := os.Chdir(cwd)
+	if err != nil {
+		log.Fatalf("error: %v\n", err)
+	}
+
+	fmt.Println(os.Getwd())
 
 	// execute command
 
