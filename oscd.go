@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 // cwd is the directory from which this command was invoked
@@ -27,23 +29,44 @@ func main() {
 	}
 
 	targetDir := os.Args[1]
+
+	// get abs path if given relative
+	if !filepath.IsAbs(targetDir) {
+		td, err := filepath.Abs(targetDir)
+		if err != nil {
+			panic(err)
+		}
+		targetDir = td
+	}
+
 	fmt.Printf("Target Directory: %s\n", targetDir)
 
 	// second arg onward is command to run
 	command := os.Args[2]
 	fmt.Printf("Command: %s\n", command)
 
-	// change to directory
-	err := os.Chdir(cwd)
-	if err != nil {
-		log.Fatalf("error: %v\n", err)
+	// check if binary exists
+	if _, err := exec.LookPath(command); err != nil {
+		panic(err)
 	}
 
-	fmt.Println(os.Getwd())
+	// change to directory
+	if err := os.Chdir(targetDir); err != nil {
+		panic(err)
+	}
+
+	// build command
+	cmd := exec.Command(command, os.Args[3:]...)
+	cmd.Env = os.Environ()
 
 	// execute command
+	cmd.Run()
 
 	// change directory back to original working directory
+	if err := os.Chdir(cwd); err != nil {
+		panic(err)
+	}
 
 	// exit
+	os.Exit(0)
 }
