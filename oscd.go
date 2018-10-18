@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -19,9 +20,18 @@ func init() {
 }
 
 func main() {
-	// first arg is target directory
+	if len(os.Args) < 3 {
+		// TODO: properly format usage.
+		fmt.Println("usage...\n\toscd <target directory> <command>")
+		os.Exit(2)
+	}
+
+	targetDir := os.Args[1]
+	fmt.Printf("Target Directory: %s\n", targetDir)
 
 	// second arg onward is command to run
+	command := os.Args[2]
+	fmt.Printf("Command: %s\n", command)
 
 	// change to directory
 
