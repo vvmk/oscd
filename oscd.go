@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 // cwd is the directory from which this command was invoked
@@ -25,25 +26,25 @@ func main() {
 		fmt.Println("usage...\n\toscd <target directory> <command>")
 		os.Exit(2)
 	}
-
 	targetDir := os.Args[1]
-	fmt.Printf("Target Directory: %s\n", targetDir)
 
 	// second arg onward is command to run
 	command := os.Args[2]
-	fmt.Printf("Command: %s\n", command)
 
 	// change to directory
-	err := os.Chdir(cwd)
+	err := os.Chdir(targetDir)
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
 
-	fmt.Println(os.Getwd())
-
 	// execute command
+	cmd := exec.Command(command, os.Args[3:]...)
+	if err = cmd.Run(); err != nil {
+		log.Fatalf("error: %v\n", err)
+	}
 
 	// change directory back to original working directory
 
-	// exit
+	// TIL: The working directory of every process is process-private,
+	// so storing/manually changing back is super unnecessary.
 }
