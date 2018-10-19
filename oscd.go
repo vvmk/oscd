@@ -27,7 +27,6 @@ func main() {
 		fmt.Println("usage...\n\toscd <target directory> <command>")
 		os.Exit(2)
 	}
-
 	targetDir := os.Args[1]
 
 	// get abs path if given relative
@@ -39,11 +38,8 @@ func main() {
 		targetDir = td
 	}
 
-	fmt.Printf("Target Directory: %s\n", targetDir)
-
 	// second arg onward is command to run
 	command := os.Args[2]
-	fmt.Printf("Command: %s\n", command)
 
 	// check if binary exists
 	if _, err := exec.LookPath(command); err != nil {
@@ -51,8 +47,8 @@ func main() {
 	}
 
 	// change to directory
-	if err := os.Chdir(targetDir); err != nil {
-		panic(err)
+	if err = os.Chdir(targetDir); err != nil {
+		log.Fatalf("error: %v\n", err)
 	}
 
 	// build command
@@ -60,13 +56,13 @@ func main() {
 	cmd.Env = os.Environ()
 
 	// execute command
-	cmd.Run()
-
-	// change directory back to original working directory
-	if err := os.Chdir(cwd); err != nil {
-		panic(err)
+	cmd := exec.Command(command, os.Args[3:]...)
+	if err = cmd.Run(); err != nil {
+		log.Fatalf("error: %v\n", err)
 	}
 
-	// exit
-	os.Exit(0)
+	// change directory back to original working directory
+	 
+	// TIL: The working directory of every process is process-private,
+	// so storing/manually changing back is super unnecessary.
 }
