@@ -47,7 +47,7 @@ func main() {
 	}
 
 	// change to directory
-	if err = os.Chdir(targetDir); err != nil {
+	if err := os.Chdir(targetDir); err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
 
@@ -56,13 +56,12 @@ func main() {
 	cmd.Env = os.Environ()
 
 	// execute command
-	cmd := exec.Command(command, os.Args[3:]...)
-	if err = cmd.Run(); err != nil {
+	if err := cmd.Run(); err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
 
 	// change directory back to original working directory
-	 
+
 	// TIL: The working directory of every process is process-private,
 	// so storing/manually changing back is super unnecessary.
 }
