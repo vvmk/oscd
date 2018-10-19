@@ -33,7 +33,7 @@ func main() {
 	if !filepath.IsAbs(targetDir) {
 		td, err := filepath.Abs(targetDir)
 		if err != nil {
-			panic(err)
+			log.Fatalf("error: %v\n", err)
 		}
 		targetDir = td
 	}
@@ -43,7 +43,7 @@ func main() {
 
 	// check if binary exists
 	if _, err := exec.LookPath(command); err != nil {
-		panic(err)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	// change to directory
