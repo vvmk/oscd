@@ -10,17 +10,6 @@ import (
 	"path/filepath"
 )
 
-// cwd is the directory from which this command was invoked
-var cwd string
-
-func init() {
-	var err error
-	cwd, err = os.Getwd()
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
-}
-
 func main() {
 	if len(os.Args) < 3 {
 		// TODO: properly format usage.
@@ -55,8 +44,6 @@ func main() {
 	if err := cmd.Run(); err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
-
-	// change directory back to original working directory
 
 	// TIL: The working directory of every process is process-private,
 	// so storing/manually changing back is super unnecessary.
