@@ -46,13 +46,9 @@ func main() {
 		log.Fatalf("error: %v\n", err)
 	}
 
-	// change to directory
-	if err := os.Chdir(targetDir); err != nil {
-		log.Fatalf("error: %v\n", err)
-	}
-
 	// build command
 	cmd := exec.Command(command, os.Args[3:]...)
+	cmd.Dir = targetDir
 	cmd.Env = os.Environ()
 
 	// execute command
